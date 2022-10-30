@@ -5,13 +5,15 @@ namespace App\Http\Controllers\API\V01\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     /**
      * Register New User
-     * @method Post
+     * @method POST
      * @param Request $request
      **/
     public function register(Request $request)
@@ -34,9 +36,27 @@ class AuthController extends Controller
             'message' => "user created successfully"
         ],201);
     }
+
+    /**
+     * Login User
+     * @method GET
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationExeption
+     **/
     public function login(Request $request)
     {
-        
+        $request->validate([
+            'email'=> ['required', 'email'],
+            'password' =>['required']
+        ]);
+        // Check User Credentials For Login
+        if(Auth::attempt($request->only(['email','password']))){
+            return response()->json(Auth::user(),200);
+        }
+        throw ValidationException::withMessages([
+            'email' => 'incorrect credentials.'
+        ]);
     }
     public function logout()
     {
