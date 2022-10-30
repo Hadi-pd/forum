@@ -53,4 +53,14 @@ class AuthControllerTest extends TestCase
         ]);
         $response->assertStatus(200);
     }
+
+    /**
+     * Test logout
+     */
+    public function test_logged_in_user_can_logout()
+    {
+        
+        $response = $this->postJson(route('auth.logout'));
+        $response->assertStatus(200);
+    }
 }

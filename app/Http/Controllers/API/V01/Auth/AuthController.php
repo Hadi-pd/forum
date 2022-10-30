@@ -15,6 +15,7 @@ class AuthController extends Controller
      * Register New User
      * @method POST
      * @param Request $request
+     * @return JsonResponse
      **/
     public function register(Request $request)
     {
@@ -61,5 +62,9 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
+
+        return response([
+            'message' => 'logged out successfully'
+        ],200);
     }
 }
